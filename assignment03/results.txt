@@ -1,0 +1,15 @@
+Encrypted message is 1394
+Decrypted message is 89
+--- Timing (nanoseconds) ---
+Key generation time: 171258
+Encryption time:     496
+Decryption time:     88695
+Total runtime:       261606
+----------------------------
+
+{'p': 3, 'q': 7, 'n': 21, 'message': 89, 'keygen_ns_med': 810, 'enc_ns_med': 208, 'dec_ns_med': 163, 'total_ns_med': 1588}
+{'p': 53, 'q': 59, 'n': 3127, 'message': 89, 'keygen_ns_med': 153789, 'enc_ns_med': 220, 'dec_ns_med': 75342, 'total_ns_med': 230532}
+{'p': 101, 'q': 113, 'n': 11413, 'message': 89, 'keygen_ns_med': 487387, 'enc_ns_med': 181, 'dec_ns_med': 681993, 'total_ns_med': 1169214}
+{'p': 211, 'q': 223, 'n': 47053, 'message': 89, 'keygen_ns_med': 1390988, 'enc_ns_med': 533, 'dec_ns_med': 3446865, 'total_ns_med': 4855285}
+{'p': 401, 'q': 409, 'n': 164009, 'message': 89, 'keygen_ns_med': 4611113, 'enc_ns_med': 602, 'dec_ns_med': 33927531, 'total_ns_med': 38537198}
+{'p': 809, 'q': 811, 'n': 656099, 'message': 89, 'keygen_ns_med': 45319525, 'enc_ns_med': 2531, 'dec_ns_med': 1291819450, 'total_ns_med': 1336048333}
