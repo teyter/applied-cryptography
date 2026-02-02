@@ -1,6 +1,5 @@
 import time
 
-ts = time.time()
 alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ " # included whitespace at the end
 
 def letter2number(c):
