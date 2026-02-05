@@ -123,9 +123,23 @@ app.get("/secret/:id", requireAuth, (req, res) => {
   res.json({ ok: true, label: row.label, data: plaintext, created_at: row.created_at });
 });
 
+app.get("/secret-raw/:id", requireAuth, (req, res) => {
+  const secretId = Number(req.params.id);
+
+  const row = db.prepare(
+    "SELECT id, user_id, label, enc_data, created_at FROM secrets WHERE id = ? AND user_id = ?"
+  ).get(secretId, req.session.userId);
+
+  if (!row) return res.status(404).json({ error: "not found" });
+
+  res.json({ ok: true, ...row });
+});
+
 app.get("/my-secrets", requireAuth, (req, res) => {
-  const rows = db.prepare("SELECT id, label, created_at FROM secrets WHERE user_id = ? ORDER BY id DESC")
-    .all(req.session.userId);
+  const rows = db.prepare(
+    "SELECT id, label, created_at FROM secrets WHERE user_id = ? ORDER BY id DESC"
+  ).all(req.session.userId);
+
   res.json({ ok: true, items: rows });
 });
 
