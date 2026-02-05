@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Secrets</title>
+</head>
+<body>
+  <h1>Store a Secret</h1>
+
+  <input id="label" placeholder="label" />
+  <input id="data" placeholder="secret data" />
+  <button id="save">Save</button>
+
+  <pre id="status"></pre>
+
+  <button id="logout">Logout</button>
+
+  <script>
+    async function post(path, body) {
+      const r = await fetch(path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(body)
+      });
+      return r.json();
+    }
+
+    document.getElementById("save").onclick = async () => {
+      const label = document.getElementById("label").value;
+      const data = document.getElementById("data").value;
+
+      const out = await post("/secret", { label, data });
+      document.getElementById("status").textContent =
+        JSON.stringify(out, null, 2);
+    };
+
+    document.getElementById("logout").onclick = async () => {
+      await post("/logout", {});
+      window.location.href = "/login.html";
+    };
+  </script>
+</body>
+</html>

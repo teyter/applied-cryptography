@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const Database = require("better-sqlite3");
 const argon2 = require("argon2");
 const crypto = require("crypto");
+const { createUser } = require("./user_service");
 const { encryptGCM, decryptGCM } = require("./crypto_helpers");
 
 const app = express();
@@ -17,6 +18,16 @@ app.use(session({
   saveUninitialized: false,
   cookie: { httpOnly: true }
 }));
+
+// prevent unauthenticated users from directly loading app.html
+app.get("/app.html", (req, res, next) => {
+  if (!req.session.userId) {
+    return res.redirect("/login.html");
+  }
+  next();
+});
+
+app.use(express.static("public"));
 
 const db = new Database("app.db");
 
@@ -58,27 +69,12 @@ function getUserKeyForSession(userRow) {
   return userKey;
 }
 
-// --- routes
-app.post("/register", async (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password) return res.status(400).json({ error: "missing fields" });
 
-  const password_hash = await argon2.hash(password, { type: argon2.argon2id });
-
-  const userKey = crypto.randomBytes(32);
-  const enc_user_key = encryptGCM(userKey, MASTER_KEY);
-
-  try {
-    const info = db.prepare(
-      "INSERT INTO users (username, password_hash, enc_user_key) VALUES (?, ?, ?)"
-    ).run(username, password_hash, enc_user_key);
-
-    res.json({ ok: true, userId: info.lastInsertRowid });
-  } catch (e) {
-    res.status(400).json({ error: "username already exists?" });
-  }
+app.get("/", (req, res) => {
+  res.redirect("/login.html");
 });
 
+// --- routes
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
   const user = getUserByUsername(username);
